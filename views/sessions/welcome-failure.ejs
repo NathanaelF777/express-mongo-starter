@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Bug Tracker</title>
+    </head>
+    <body>
+        <h1>Welcome to Bug Tracker!</h1>
+        <h3>Log in or click sign up to create a new account.</h3>
+        <form class="login" action="/sessions" method="POST">
+            <label for="name">User Name:</label>
+            <input type="text" name="Username" id="name" placeholder="Username" required>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <div class="err-message">
+                <p>That username/password combination could not be found. Please try again.</p>
+            </div>
+            <br>
+            <button type="submit" value="Submit">Submit</button>
+        </form>
+        <button onclick="window.location.href = '/users/new';" class="sign-up">Create Account</button>
+    </body>
+</html>

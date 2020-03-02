@@ -3,8 +3,9 @@ const express = require('express')
 const sessions = express.Router()
 const User = require('../models/users.js')
 
+
 sessions.get('/new', (req, res) => {
-    res.render('sessions/new.ejs', {
+    res.render('sessions/welcome.ejs', {
         currentUser: req.session.currentUser
     })
 })
@@ -16,7 +17,10 @@ sessions.post('/', (req, res) => {
             console.log(err);
             res.send('The database had a problem.')
         } else if (!foundUser) {
-            res.send('<a href="/">Sorry, no user found </a>')
+            // res.send('<a href="/">Sorry, no user found </a>')
+            res.render('sessions/welcome-failure.ejs', {
+                currentUser: req.session.currentUser
+            })
         } else {
             if (bcrypt.compareSync(req.body.password, foundUser.password)) {
                 req.session.currentUser = foundUser

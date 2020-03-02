@@ -7,6 +7,8 @@ const mongoose = require ('mongoose');
 const session = require('express-session')
 const app = express ();
 const db = mongoose.connection;
+require('dotenv').config()
+
 //___________________
 //Port
 //___________________
@@ -64,7 +66,11 @@ app.use('/users', usersController)
 //___________________
 //localhost:3000
 app.get('/' , (req, res) => {
-  res.send('Hello World!');
+    if (req.session.currentUser) {
+        res.redirect('/tracker')
+    } else {
+        res.redirect('/sessions/new');
+    }
 });
 
 //___________________
