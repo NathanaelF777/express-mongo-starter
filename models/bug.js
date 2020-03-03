@@ -7,7 +7,9 @@ const bugSchema = new Schema({
     recreation: String,
     status: {type: String, required: true, default: 'Open'},
     project: { type: Schema.Types.ObjectId, ref: 'Project'},
-})
+}, {
+    timestamps: true
+});
 
 const Bug = mongoose.model('bug', bugSchema)
  module.exports = Bug

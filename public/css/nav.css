@@ -1,0 +1,268 @@
+:root {
+  font-size: 16px;
+  font-family: 'Open Sans';
+  --text-primary: #b6b6b6;
+  --text-secondary: #ececec;
+  --bg-primary: #141418;
+  --bg-secondary: rgb(43, 43, 50);
+  --transition-speed: 600ms;
+}
+
+/* oldcolor: #23232e */
+
+body {
+  color: rgb(212, 212, 212);
+  background-color: rgb(43, 43, 50);
+}
+
+nav {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+body::-webkit-scrollbar-track {
+  background: #1e1e24;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #012200;
+}
+
+main {
+  margin-left: 5rem !important;
+  padding: 1rem !important;
+}
+
+.content {
+    margin-left: 6rem;
+    margin-top: 1rem;
+}
+
+.bug-submit {
+    float: right;
+}
+
+.bug-stage {
+    margin: 1.2rem 0;
+    padding: 1rem 0.7rem;
+    background-color: rgb(23, 23, 30);
+}
+
+.bug-open {
+    color: #d74747;
+}
+
+.bug-progress {
+    color: #e2db46;
+}
+
+.bug-testing {
+    color: #4d76de;
+}
+
+.bug-closed {
+    color: #4de084;
+}
+
+.bug-link {
+    transition: var(--transition-speed);
+    text-decoration: none;
+    color: rgb(23, 23, 30);
+    background-color: white;
+}
+
+.bug-link:hover {
+    transition: var(--transition-speed);
+    text-decoration: none;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: rgb(23, 23, 30);
+}
+
+.bug-card {
+    background-color: rgb(83, 83, 90);
+    margin: 0;
+    padding: 0.5rem;
+
+}
+
+.bug-item {
+    color: rgb(23, 23, 30);
+    margin: 0;
+    box-shadow: 0px 2px 29px -4px rgba(0,0,0,1);
+}
+
+.bug-title {
+    margin: 0.5rem
+    padding: 1rem;
+    float: left
+}
+
+.bug-text {
+    margin: 0;
+    padding: .2rem 0;
+}
+
+.bug-time {
+    color: red;
+    float: right
+}
+
+.bug-btn {
+    float: right;
+}
+
+.navbar {
+  position: fixed;
+  background-color: var(--bg-primary);
+  transition: width 600ms ease;
+  z-index: 999;
+  border: 1px solid #141418;
+}
+
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-item {
+  width: 100% !important;
+}
+
+.nav-item:last-child {
+  margin-top: auto;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  filter: grayscale(100%) opacity(0.7);
+  transition: var(--transition-speed);
+}
+
+.nav-link:hover {
+  filter: grayscale(0%) opacity(1);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.link-text {
+  display: none;
+  margin-left: 1rem;
+}
+
+.nav-link svg, .new-bug {
+    font-size: 2rem;
+    width: 2rem;
+    min-width: 2rem;
+    margin: 0 1.5rem;
+}
+
+.fa-primary, .new-bug{
+  color: #26bd35;
+}
+
+.fa-secondary {
+  color: #26bd35;
+}
+
+.fa-primary,
+.fa-secondary {
+  transition: var(--transition-speed);
+}
+
+.logo {
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  font-size: 1rem;
+  letter-spacing: 0.3ch;
+  width: 100%;
+}
+
+.logo svg {
+  transform: rotate(0deg);
+  transition: var(--transition-speed);
+}
+
+.logo-text
+{
+  display: inline;
+  position: absolute;
+  left: -999px;
+  transition: var(--transition-speed);
+}
+
+.navbar:hover .logo svg {
+  transform: rotate(-180deg);
+}
+
+/* Small screens */
+@media only screen and (max-width: 600px) {
+  .navbar {
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 5rem !important;
+  }
+
+  .logo {
+    display: none;
+  }
+
+  .navbar-nav {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+  }
+
+  .nav-link {
+    justify-content: space-between !important;
+
+  }
+
+  main {
+    margin: 0 !important;
+  }
+}
+
+/* Large screens */
+@media only screen and (min-width: 600px) {
+  .navbar {
+    top: 0;
+    width: 5rem !important;
+    height: 100vh !important;
+  }
+
+  .navbar:hover {
+    width: 14.5rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .navbar:hover .link-text {
+    display: inline !important;
+  }
+
+  .navbar:hover .logo svg
+  {
+    margin-left: 11rem !important;
+  }
+
+  .navbar:hover .logo-text
+  {
+    left: 0px;
+  }
+}
