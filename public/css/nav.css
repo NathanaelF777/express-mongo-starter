@@ -126,6 +126,18 @@ main {
     color: rgb(23, 23, 30);
 }
 
+.proj-stage {
+    margin-top: 2rem;
+    padding: 0;
+}
+
+.proj-item {
+    margin: 1.2rem 0;
+    padding: 1rem 0.7rem;
+    background-color: rgb(23, 23, 30);
+    height: 5rem;
+}
+
 .navbar {
   position: fixed;
   background-color: var(--bg-primary);

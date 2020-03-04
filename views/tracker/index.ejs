@@ -12,12 +12,38 @@
                 <% console.log(currentUser) %>
                 <% console.log(projects) %>
                 <h2><%=currentUser.username%>'s Projects:</h2>
-                <% for (let i = 0; i < projects.length; i++) {%>
-                <div class="row">
-                    <div class="container">
-                        <h2> <%=projects[i].name %> </h2>
+                <div class="row align-items-center justify-content-center">
+                    <div class="col proj-stage container align-self-center">
+                        <% for (let i = 0; i < projects.length; i++) {%>
+                            <div class="proj-item">
+                                <h4><%=projects[i].name%></h4>
+                            </div>
+                            <%}%>
                     </div>
-                </div> <%}%>
+                    <div class="col proj-stage container align-self-center">
+                        <% for (let i = 0; i < projects.length; i++) {%>
+                            <div class="proj-item">
+                                <h6><%=projects[i].description%></h6>
+                            </div>
+                            <%}%>
+                    </div>
+                    <div class="col proj-stage container align-self-center">
+                        <% for (let i = 0; i < projects.length; i++) {%>
+                            <div class="proj-item">
+                                <button type="button" class="btn btn-primary bug-submit">Details</button>
+                            </div>
+                            <%}%>
+                    </div>
+                    <div class="col proj-stage container align-self-center">
+                        <% for (let i = 0; i < projects.length; i++) {%>
+                            <div class="proj-item">
+                                <form class="" action="/tracker/<%=projects[i]._id%>/select?_method=PUT" method="POST">
+                                    <button type="submit" class="btn btn-success bug-submit">View</button>
+                                </form>
+                            </div>
+                            <%}%>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Modal -->

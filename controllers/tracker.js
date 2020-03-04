@@ -102,6 +102,12 @@ router.get('/:id/edit', isAuthenticated, (req, res) => {
     })
 })
 
+//Bug index
+router.get('/:id/bugs', isAuthenticated, (req, res) => {
+    let currentBugs = []
+    let currentProject = {}
+})
+
 // ***************** Functional *******************//
 
 // create
@@ -156,6 +162,17 @@ router.delete('/:id', isAuthenticated, (req, res) => {
     })
 })
 
+// select
+router.put('/:id/select', isAuthenticated, (req, res) => {
+    User.findByIdAndUpdate(req.session.currentUser._id, {currentProject: req.params.id}, (err, updatedUser) => {
+        if (err) {
+            res.send(err)
+        } else {
+            req.session.currentUser.currentProject = req.params.id;
+            res.redirect(`/tracker/${req.params.id}/bugs`)
+        }
+    })
+})
 
 
 // Export Router:
