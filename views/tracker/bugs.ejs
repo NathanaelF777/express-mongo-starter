@@ -8,8 +8,8 @@
         <%- include ('../partials/nav.ejs') %>
         <div class="content">
             <div class="container">
-                <button type="button" class="btn btn-primary bug-submit">Submit Bug</button>
-                <h2>Project 1 Bugs:</h1>
+                <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-primary bug-submit">Submit Bug</button>
+                <h2><%=currentProject.name%> Bugs:</h1>
                 <div class="row">
                     <div class="col bug-stage">
                         <h3 class="bug-col-name bug-open">Open</h3>
@@ -88,5 +88,34 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Submit New Bug</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <form action="/tracker/<%=currentProject._id%>/new" method="POST">
+                      <div class="form-group">
+                          <label for="description">Description</label>
+                          <input type="text" class="form-control" id="description" name="description" placeholder="Bug Description">
+                        </div>
+                        <div class="form-group">
+                          <label for="recreation">Steps to Recreate</label>
+                          <textarea class="form-control" id="recreation" name="recreation" rows="3"></textarea>
+                        </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%- include ('../partials/footer.ejs') %>
     </body>
 </html>

@@ -1,7 +1,6 @@
 // Dependencies
 const router = require('express').Router();
-const Bug = require('../models/bug.js');
-const Project = require('../models/project.js');
+const models = require('../models/project.js');
 const User = require('../models/users.js');
 
 // Authentication Function
@@ -17,7 +16,7 @@ const isAuthenticated = (req, res, next) => {
 
 // test
 router.get('/test', (req, res) => {
-    Project.find({}, (err, data) => {
+    models.Project.find({}, (err, data) => {
         res.render('tracker/bugs.ejs')
     })
 })
@@ -26,12 +25,12 @@ router.get('/test', (req, res) => {
 router.get('/', isAuthenticated, (req, res) => {
     let currentProjects = []
     for (project of req.session.currentUser.projects) {
-        Project.findById(project, (err, data) => {
+        models.Project.findById(project, (err, data) => {
             currentProjects.push(data)
         })
     }
     console.log(currentProjects);
-    Project.find({_id: req.session.currentUser.projects}, (err, foundProjects) => {
+    models.Project.find({_id: req.session.currentUser.projects}, (err, foundProjects) => {
         if (err) {
             console.log(err.message);
             res.send("There appears to be an error.")
@@ -53,7 +52,7 @@ router.get('/new', isAuthenticated, (req, res) => {
 
 // seed
 router.get('/seed', isAuthenticated, (req, res) => {
-    Bug.create([
+    models.Bug.create([
         // {
         //     title: "Pillar of Autumn",
         //     entry: "Found alien ring structure. Performing emergency crash landing.",
@@ -73,7 +72,7 @@ router.get('/seed', isAuthenticated, (req, res) => {
 
 // Show
 router.get('/:id', (req, res) => {
-    Bug.findById(req.params.id, (err, foundBug) => {
+    models.Bug.findById(req.params.id, (err, foundBug) => {
         if (err) {
             res.send(err.message)
         } else {
@@ -89,7 +88,7 @@ router.get('/:id', (req, res) => {
 
 // Edit
 router.get('/:id/edit', isAuthenticated, (req, res) => {
-    Bug.findById(req.params.id, (err, foundLog) => {
+    models.Bug.findById(req.params.id, (err, foundLog) => {
         if (err) {
             res.send(err.message)
         } else {
@@ -104,17 +103,34 @@ router.get('/:id/edit', isAuthenticated, (req, res) => {
 
 //Bug index
 router.get('/:id/bugs', isAuthenticated, (req, res) => {
-    let currentBugs = []
+    let openBugs = []
+    let inProgressBugs = []
+    let testingBugs = []
+    let closedBugs = []
     let currentProject = {}
-    Project.findById(req.session.currentUser.currentProject, (err, foundProject) => {
+    models.Project.findById(req.session.currentUser.currentProject, (err, foundProject) => {
         console.log(foundProject);
+        for (bug of foundProject.bugs) {
+            if (bug.status === 'Open') {
+                openBugs.push(bug)
+            } else if (bug.status === 'In Progress') {
+                inProgressBugs.push(bug)
+            } else if (bug.status === 'Testing') {
+                testingBugs.push(bug)
+            } else {
+                closedBugs.push(bug)
+            }
+        }
         if (err) {
             res.send(err)
         } else {
             res.render('tracker/bugs.ejs', {
                 currentUser: req.session.currentUser,
                 currentProject: foundProject || currentProject,
-                bugs: foundProject.bugs || currentBugs
+                openBugs: openBugs,
+                inProgressBugs: inProgressBugs,
+                testingBugs: testingBugs,
+                closedBugs: closedBugs
             })
         }
     })
@@ -127,7 +143,7 @@ router.get('/:id/bugs', isAuthenticated, (req, res) => {
 router.post('/', isAuthenticated, (req, res) => {
     req.body.creator = req.session.currentUser;
     req.body.users = [req.session.currentUser];
-    Project.create(req.body, (err, newProject) => {
+    models.Project.create(req.body, (err, newProject) => {
         if (err) {
             console.log(err.message);
             res.send("There was a problem. Please try again.")
@@ -153,7 +169,7 @@ router.put('/:id', isAuthenticated, (req, res) => {
     } else {
         req.body.shipsBroken = false
     };
-    Bug.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedLog) => {
+    models.Bug.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedLog) => {
         if (err) {
             console.log(err.message);
         } else {
@@ -165,12 +181,29 @@ router.put('/:id', isAuthenticated, (req, res) => {
 
 // DELETE
 router.delete('/:id', isAuthenticated, (req, res) => {
-    Bug.findByIdAndDelete(req.params.id, (err, deletedLog) => {
+    models.Bug.findByIdAndDelete(req.params.id, (err, deletedLog) => {
         if (err) {
             console.log(err.message);
         } else {
             console.log(`${deletedLog} has been deleted.`);
             res.redirect('/tracker')
+        }
+    })
+})
+
+// Create // BUG:
+router.post('/:id/new', isAuthenticated, (req, res) => {
+    req.body.author = req.session.currentUser;
+    req.body.project = req.params.id;
+    models.Bug.create(req.body, (err, newBug) => {
+        if (err) {
+            res.send(err)
+        } else {
+            console.log(newBug);
+            models.Project.findByIdAndUpdate(req.params.id, {$push: {bugs: newBug}}, (err, results) => {
+                console.log(results);
+                res.redirect(`/tracker/${req.params.id}/bugs`)
+            })
         }
     })
 })

@@ -11,8 +11,7 @@ const bugSchema = new Schema({
     timestamps: true
 });
 
-const Bug = mongoose.model('bug', bugSchema)
- module.exports = Bug
+
 
 const projectSchema = new Schema({
     name: {type: String, required: true},
@@ -22,5 +21,10 @@ const projectSchema = new Schema({
     bugs: [bugSchema]
 })
 
+const Bug = mongoose.model('bug', bugSchema)
+
 const Project = mongoose.model('project', projectSchema)
- module.exports = Project
+ module.exports = {
+     Project: Project,
+     Bug: Bug
+    }
