@@ -8,85 +8,46 @@
         <%- include ('../partials/nav.ejs') %>
         <div class="content">
             <div class="container">
-                <button type="button" class="btn btn-primary bug-submit">Submit Bug</button>
-                <h2>Project 1 Bugs:</h1>
+                <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-success bug-submit">New Project</button>
+                <% console.log(currentUser) %>
+                <% console.log(projects) %>
+                <h2><%=currentUser.username%>'s Projects:</h2>
+                <% for (let i = 0; i < projects.length; i++) {%>
                 <div class="row">
-                    <div class="col bug-stage">
-                        <h3 class="bug-col-name bug-open">Open</h3>
-                        <ul class="list-group bug-list">
-                            <li class="list-group-item bug-card">
-                                <div class="card bug-item">
-                                    <a href="#" class="bug-link">
-                                    <div class="container-fluid  card-body">
-                                        <button type="button" class="bug-btn btn-sm btn btn-outline-danger">></button>
-                                        <p class="card-text bug-text">A really sucky bug found in some good code.</p>
-                                        <h6 class="card-title bug-title">Author: Bob</h6>
-                                        <p class="card-text bug-time">time</p>
-                                    </div>
-                                </a>
-                                </div>
-                            </li>
-                            <li class="list-group-item bug-card">
-                                <div class="card bug-item">
-                                    <div class="container-fluid  card-body">
-                                        <h6 class="card-title">Author: Bob</h6>
-                                        <p class="card-text">A really sucky bug found in some good code.</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                    <div class="container">
+                        <h2> <%=projects[i].name %> </h2>
                     </div>
-                    <div class="col bug-stage">
-                        <h3 class="bug-col-name bug-progress">In Progress</h3>
-                        <ul class="list-group bug-list">
-                            <li class="list-group-item bug-card">
-                                <div class="card bug-item">
-                                    <div class="container-fluid  card-body">
-                                        <h6 class="card-title">Author: Bob</h6>
-                                        <p class="card-text">A really sucky bug found in some good code.</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col bug-stage">
-                        <h3 class="bug-col-name bug-testing">Testing</h3>
-                        <ul class="list-group bug-list">
-                            <li class="list-group-item bug-card">
-                                <div class="card bug-item">
-                                    <a href="#" class="bug-link">
-                                    <div class="container-fluid  card-body">
-                                        <h6 class="card-title">Author: Bob</h6>
-                                        <p class="card-text">A really sucky bug found in some good code.</p>
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col bug-stage">
-                        <h3 class="bug-col-name bug-closed">Closed</h3>
-                        <ul class="list-group bug-list">
-                            <li class="list-group-item bug-card">
-                                <div class="card bug-item">
-                                    <div class="container-fluid  card-body">
-                                        <h6 class="card-title">Author: Bob</h6>
-                                        <p class="card-text">A really sucky bug found in some good code.</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item bug-card">
-                                <div class="card bug-item">
-                                    <div class="container-fluid  card-body">
-                                        <h6 class="card-title">Author: Bob</h6>
-                                        <p class="card-text">A really sucky bug found in some good code.</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                </div> <%}%>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">New Project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <form action="/tracker" method="POST">
+                      <div class="form-group">
+                          <label for="name">Project Name</label>
+                          <input type="text" class="form-control" id="name" name="name" placeholder="Project name">
+                        </div>
+                        <div class="form-group">
+                          <label for="description">Description</label>
+                          <input type="text" class="form-control" id="description" placeholder="Description" name="description">
+                        </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%- include ('../partials/footer.ejs') %>
     </body>
 </html>

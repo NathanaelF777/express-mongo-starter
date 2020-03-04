@@ -25,7 +25,7 @@ users.get('/new', (req, res) => {
 // Create New User
 users.post('/', (req, res) => {
     if (req.body.password === req.body.password2) {
-        if (isUnique(req.body.username) === false) {
+        if (!isUnique(req.body.username)) {
             req.body.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
             User.create(req.body, (err, createdUser) => {
                 if (err) {

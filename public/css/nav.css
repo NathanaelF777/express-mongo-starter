@@ -115,6 +115,17 @@ main {
     float: right;
 }
 
+.new-project-cont {
+    width: 50%;
+    margin-top: 10rem;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.modal {
+    color: rgb(23, 23, 30);
+}
+
 .navbar {
   position: fixed;
   background-color: var(--bg-primary);

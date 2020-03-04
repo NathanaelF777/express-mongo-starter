@@ -1,6 +1,8 @@
 // Dependencies
 const router = require('express').Router();
 const Bug = require('../models/bug.js');
+const Project = require('../models/project.js');
+const User = require('../models/users.js');
 
 // Authentication Function
 const isAuthenticated = (req, res, next) => {
@@ -15,20 +17,27 @@ const isAuthenticated = (req, res, next) => {
 
 // test
 router.get('/test', (req, res) => {
-    Bug.find({}, (err, data) => {
-        res.send(data)
+    Project.find({}, (err, data) => {
+        res.render('tracker/bugs.ejs')
     })
 })
 
 // index
-router.get('/', (req, res) => {
-    Bug.find({}, (err, foundBugs) => {
+router.get('/', isAuthenticated, (req, res) => {
+    let currentProjects = []
+    for (project of req.session.currentUser.projects) {
+        Project.findById(project, (err, data) => {
+            currentProjects.push(data)
+        })
+    }
+    console.log(currentProjects);
+    Project.find({_id: req.session.currentUser.projects}, (err, foundProjects) => {
         if (err) {
             console.log(err.message);
             res.send("There appears to be an error.")
         } else {
             res.render('tracker/index.ejs', {
-                bugs: foundBugs,
+                projects: currentProjects,
                 currentUser: req.session.currentUser
             })
         }
@@ -97,18 +106,23 @@ router.get('/:id/edit', isAuthenticated, (req, res) => {
 
 // create
 router.post('/', isAuthenticated, (req, res) => {
-    if (req.body.shipsBroken === 'on') {
-        req.body.shipsBroken = true
-    } else {
-        req.body.shipsBroken = false
-    };
-    Bug.create(req.body, (err, newLog) => {
+    req.body.creator = req.session.currentUser;
+    req.body.users = [req.session.currentUser];
+    Project.create(req.body, (err, newProject) => {
         if (err) {
             console.log(err.message);
             res.send("There was a problem. Please try again.")
         } else {
-            console.log(`New bug created: ${newLog}`);
-            res.redirect('/tracker')
+            console.log(`New project created: ${newProject}`);
+            req.session.currentUser.projects.push(newProject);
+            User.findByIdAndUpdate(req.session.currentUser._id, req.session.currentUser, (err, user) => {
+                if (err) {
+                    res.send(err)
+                } else {
+                    console.log(user);
+                    res.redirect('/tracker')
+                }
+            })
         }
     })
 })
