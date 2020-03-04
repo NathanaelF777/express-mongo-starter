@@ -106,7 +106,20 @@ router.get('/:id/edit', isAuthenticated, (req, res) => {
 router.get('/:id/bugs', isAuthenticated, (req, res) => {
     let currentBugs = []
     let currentProject = {}
+    Project.findById(req.session.currentUser.currentProject, (err, foundProject) => {
+        console.log(foundProject);
+        if (err) {
+            res.send(err)
+        } else {
+            res.render('tracker/bugs.ejs', {
+                currentUser: req.session.currentUser,
+                currentProject: foundProject || currentProject,
+                bugs: foundProject.bugs || currentBugs
+            })
+        }
+    })
 })
+
 
 // ***************** Functional *******************//
 
