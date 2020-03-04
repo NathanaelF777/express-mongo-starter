@@ -56,9 +56,9 @@
           <span class="link-text">Account</span>
         </a>
       </li>
-
+      <form action="/sessions?_method=DELETE" method="POST" id="log-out" hidden></form>
       <li class="nav-item">
-        <a href="#" class="nav-link">
+        <a href="#" class="nav-link" onclick="document.getElementById('log-out').submit()">
             <span class="new-bug icon">
                 <i class="fas fa-sign-out-alt"></i>
             </span>

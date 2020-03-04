@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head>
-        <meta charset="utf-8">
-        <title>Bug Tracker</title>
+        <%- include ('../partials/head.ejs') %>
+        <title>Bug Tracker | Login</title>
     </head>
     <body>
-        <h1>Welcome to Bug Tracker!</h1>
-        <h3>Log in or click sign up to create a new account.</h3>
-        <form class="login" action="/sessions" method="POST">
-            <label for="username">User Name:</label>
-            <input type="text" name="username" id="name" placeholder="Username" required>
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" placeholder="Password" required>
-            <div class="err-message">
-
+        <div class="content">
+            <div class="container new-project-cont">
+                <div class="login-icon">
+                    <i class="fas fa-spider"></i>
+                </div>
+                <h2 class="login-title">Welcome to Bug Tracker</h2>
+                <form class="login" action="/sessions" method="POST">
+                    <div class="form-group">
+                        <label for="username">User name</label>
+                        <input type="text" class="form-control" id="username" aria-describedby="User Name" placeholder="Enter user name" name="username">
+                        <small id="unhelp" class="form-text text-muted">This must be unique.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="remember-me">
+                        <label class="form-check-label" for="remember-me">Remember me?</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary login-button">Submit</button>
+                    <button type="button" onclick="window.location.href = '/users/new';" class="btn btn-success sign-up">Create Account</button>
+                </form>
             </div>
-            <br>
-            <button type="submit" value="Submit">Submit</button>
-        </form>
-        <button onclick="window.location.href = '/users/new';" class="sign-up">Create Account</button>
+        </div>
+        <%- include ('../partials/footer.ejs') %>
     </body>
 </html>

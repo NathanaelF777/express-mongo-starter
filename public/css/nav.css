@@ -37,6 +37,21 @@ main {
   padding: 1rem !important;
 }
 
+.login-icon {
+    text-align: center;
+    font-size: 10rem;
+    color: #26bd35;
+}
+
+.login-title {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.sign-up {
+    float: right;
+}
+
 .content {
     margin-left: 6rem;
     margin-top: 1rem;

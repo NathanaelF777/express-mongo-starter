@@ -9,6 +9,7 @@ const isUnique = (name) => {
     User.exists({username: name}, (err, result) => {
         if (err) {
             res.render('users/new-usernamefail.ejs')
+            return result
         } else {
             console.log(result);
             return result
@@ -25,7 +26,11 @@ users.get('/new', (req, res) => {
 // Create New User
 users.post('/', (req, res) => {
     if (req.body.password === req.body.password2) {
-        if (!isUnique(req.body.username)) {
+        if (async isUnique(req.body.username)) {
+            console.log(isUnique(req.body.username) + ' first');
+            res.render('users/new-usernamefail.ejs')
+            } else {
+                console.log(isUnique(req.body.username) + ' second');
             req.body.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
             User.create(req.body, (err, createdUser) => {
                 if (err) {
@@ -36,8 +41,6 @@ users.post('/', (req, res) => {
                     res.redirect('/')
                 }
             })
-        } else {
-            res.render('users/new-usernamefail.ejs')
         }
     } else {
         res.render('users/new-passfail.ejs')
