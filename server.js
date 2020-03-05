@@ -9,6 +9,7 @@ const app = express ();
 const db = mongoose.connection;
 require('dotenv').config()
 
+
 //___________________
 //Port
 //___________________
@@ -43,6 +44,8 @@ app.use(session({
 
 //use public folder for static assets
 app.use(express.static('public'));
+var distDir = __dirname + "/dist/";
+ app.use(express.static(distDir));
 
 // populates req.body with parsed info from forms - if no data from forms will return an empty object {}
 app.use(express.urlencoded({ extended: false }));// extended: false - does not allow nested objects in query strings
