@@ -141,3 +141,27 @@
     </div>
   </div>
 </div>
+
+
+// create
+router.post('/', isAuthenticated, (req, res) => {
+    req.body.creator = req.session.currentUser;
+    req.body.users = [req.session.currentUser];
+    models.Project.create(req.body, (err, newProject) => {
+        if (err) {
+            console.log(err.message);
+            res.send("There was a problem. Please try again.")
+        } else {
+            console.log(`New project created: ${newProject}`);
+            req.session.currentUser.projects.push(newProject);
+            User.findByIdAndUpdate(req.session.currentUser._id, req.session.currentUser, (err, user) => {
+                if (err) {
+                    res.send(err)
+                } else {
+                    console.log(user);
+                    res.redirect('/tracker')
+                }
+            })
+        }
+    })
+})

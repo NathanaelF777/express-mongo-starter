@@ -72,6 +72,24 @@ router.get('/seed', isAuthenticated, (req, res) => {
     res.redirect('/tracker')
 })
 
+//User show
+router.get('/user', isAuthenticated, (req, res) => {
+    User.findById(req.session.currentUser._id, (err, user) => {
+        let projectNumber = 0
+        for (project of user.projects) {
+            projectNumber++
+        }
+        if (err) {
+            res.send(err)
+        } else {
+            res.render('tracker/showaccount.ejs', {
+                currentUser: user,
+                projectNumber: projectNumber
+            })
+        }
+    })
+})
+
 // Show
 router.get('/:id', (req, res) => {
     models.Project.findById(req.params.id, (err, foundProject) => {
@@ -186,14 +204,11 @@ router.post('/', isAuthenticated, (req, res) => {
             res.send("There was a problem. Please try again.")
         } else {
             console.log(`New project created: ${newProject}`);
-            req.session.currentUser.projects.push(newProject);
-            User.findByIdAndUpdate(req.session.currentUser._id, req.session.currentUser, (err, user) => {
-                if (err) {
-                    res.send(err)
-                } else {
-                    console.log(user);
-                    res.redirect('/tracker')
-                }
+            User.findById(req.session.currentUser._id, (err, foundUser) => {
+                foundUser.projects.push(newProject)
+                req.session.currentUser = foundUser
+                foundUser.save()
+                res.redirect('/tracker')
             })
         }
     })
@@ -214,26 +229,10 @@ router.post('/join', isAuthenticated, (req, res) => {
 })
 
 
-// Update
-router.put('/:id', isAuthenticated, (req, res) => {
-    if (req.body.shipsBroken === 'on' || true) {
-        req.body.shipsBroken = true
-    } else {
-        req.body.shipsBroken = false
-    };
-    models.Bug.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedLog) => {
-        if (err) {
-            console.log(err.message);
-        } else {
-            console.log(`${updatedLog} has been updated.`);
-            res.redirect('/tracker');
-        }
-    })
-})
-
 // DELETE
 router.delete('/:id', isAuthenticated, (req, res) => {
-    User.findOne(req.session.currentUser, (err, currentUser) => {
+    User.findById(req.session.currentUser._id, (err, currentUser) => {
+        console.log();
         if (err) {
             res.send(err.message);
         } else {
@@ -371,7 +370,6 @@ router.delete('/:id/bugs/:bug', isAuthenticated, (req, res) => {
             res.send(err)
         } else {
             project.bugs.pull({_id: req.params.bug});
-            // req.session.currentUser.currentProject = project
             project.save()
             res.redirect(`/tracker/${req.session.currentUser.currentProject}/bugs`)
         }

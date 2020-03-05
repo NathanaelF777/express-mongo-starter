@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <%- include ('../partials/head.ejs') %>
+        <title></title>
+    </head>
+    <body>
+        <%- include ('../partials/nav.ejs') %>
+        <div class="content">
+            <div class="container new-proj-cont">
+                <div class="project-show jumbotron">
+                    <h1 class='display-2'><%=currentUser.username%></h1>
+                    <h4>Joined:</h4>
+                    <h6><%=currentUser.createdAt%></h6>
+                    <br>
+                    <h4>Number of Projects: <%=projectNumber%></h4>
+                    <br>
+                    <div class="align-content-center show-btn-cont">
+                        <button type="button" class="btn btn-secondary show-btn" onclick="window.location.href = '/tracker';">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
