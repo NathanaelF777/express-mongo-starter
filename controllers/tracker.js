@@ -30,6 +30,7 @@ router.get('/', isAuthenticated, async (req, res) => {
                 currentProjects.push(data)
             })
         }
+        return
     }
     await loadProjects().then(
         models.Project.find({_id: req.session.currentUser.projects}, (err, foundProjects) => {
