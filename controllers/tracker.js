@@ -183,6 +183,21 @@ router.post('/', isAuthenticated, (req, res) => {
     })
 })
 
+// Join
+router.post('/join', isAuthenticated, (req, res) => {
+    User.findById(req.session.currentUser._id, (err, user) => {
+        if (err) {
+            res.send(err)
+        } else {
+            user.projects.push(req.body.projectId)
+            req.session.currentUser = user
+            user.save()
+            res.redirect('/tracker')
+        }
+    })
+})
+
+
 // Update
 router.put('/:id', isAuthenticated, (req, res) => {
     if (req.body.shipsBroken === 'on' || true) {
@@ -233,6 +248,7 @@ router.delete('/:id', isAuthenticated, (req, res) => {
         }
     })
 })
+
 
 // Create // BUG:
 router.post('/:id/new', isAuthenticated, (req, res) => {

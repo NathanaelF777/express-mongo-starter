@@ -22,6 +22,12 @@ users.post('/', async (req, res) => {
                 if (err) {
                     console.log(err);
                 } else {
+                    createdUser.currentProject = {
+                        name: 'placeholder',
+                        description: 'make a project',
+                        creator: createdUser,
+                        users: [createdUser]
+                    }
                     console.log('user is created', createdUser);
                     req.session.currentUser = createdUser
                     res.redirect('/')
