@@ -17,7 +17,7 @@
                             <% for (bug of openBugs) { %>
                             <li class="list-group-item bug-card">
                                 <div class="card bug-item">
-                                    <a href="/tracker/bug/<%=bug._id%>/show" class="bug-link">
+                                    <a href="/tracker/<%=currentProject._id%>/bugs/<%=bug._id%>" class="bug-link">
                                     <div class="container-fluid  card-body">
 
                                         <p class="card-text bug-text"><%=bug.description%></p>
@@ -38,7 +38,7 @@
                             <% for (bug of inProgressBugs) { %>
                             <li class="list-group-item bug-card">
                                 <div class="card bug-item">
-                                    <a href="/tracker/bug/<%=bug._id%>/show" class="bug-link">
+                                    <a href="/tracker/<%=currentProject._id%>/bugs/<%=bug._id%>" class="bug-link">
                                     <div class="container-fluid  card-body">
                                         <p class="card-text bug-text"><%=bug.description%></p>
                                         <h6 class="card-title bug-title" style="color: grey;"><%=bug.author%></h6>
@@ -58,7 +58,7 @@
                             <% for (bug of testingBugs) { %>
                             <li class="list-group-item bug-card">
                                 <div class="card bug-item">
-                                    <a href="/tracker/bug/<%=bug._id%>/show" class="bug-link">
+                                    <a href="/tracker/<%=currentProject._id%>/bugs/<%=bug._id%>%>" class="bug-link">
                                     <div class="container-fluid  card-body">
                                         <p class="card-text bug-text"><%=bug.description%></p>
                                         <h6 class="card-title bug-title" style="color: grey;"><%=bug.author%></h6>
@@ -78,7 +78,7 @@
                             <% for (bug of closedBugs) { %>
                             <li class="list-group-item bug-card">
                                 <div class="card bug-item">
-                                    <a href="/tracker/bug/<%=bug._id%>/show" class="bug-link">
+                                    <a href="/tracker/<%=currentProject._id%>/bugs/<%=bug._id%>%>" class="bug-link">
                                     <div class="container-fluid  card-body">
                                         <p class="card-text bug-text"><%=bug.description%></p>
                                         <h6 class="card-title bug-title" style="color: grey;"><%=bug.author%></h6>

@@ -160,6 +160,13 @@ main {
     margin-left: auto;
 }
 
+.bug-show-cont {
+    width: 60%;
+    margin-top: 10rem;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 .modal {
     color: rgb(23, 23, 30);
 }

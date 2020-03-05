@@ -157,6 +157,22 @@ router.get('/:id/bugs', isAuthenticated, (req, res) => {
     })
 })
 
+// Bug Show
+router.get('/:id/bugs/:bug', isAuthenticated, (req, res) => {
+    models.Project.findById(req.params.id, (err, currentProject) => {
+        if (err) {
+            res.send(err)
+        } else {
+            let bug = currentProject.bugs.id(req.params.bug)
+            res.render('tracker/showbugs.ejs', {
+                project: currentProject,
+                bug: bug,
+                currentUser: req.session.currentUser
+            })
+        }
+    })
+})
+
 
 // ***************** Functional *******************//
 
@@ -217,25 +233,18 @@ router.put('/:id', isAuthenticated, (req, res) => {
 
 // DELETE
 router.delete('/:id', isAuthenticated, (req, res) => {
-    console.log('this?');
     User.findOne(req.session.currentUser, (err, currentUser) => {
         if (err) {
             res.send(err.message);
         } else {
-            console.log('step 1');
             currentUser.projects.pull({_id: req.params.id})
-            console.log('step 2');
             currentUser.currentProject = currentUser.projects[0];
-            console.log('step 3');
             req.session.currentUser = currentUser
-            console.log('step 4');
             currentUser.save();
-            console.log('step 5');
             models.Project.findByIdAndDelete(req.params.id, (err, deletedProject) => {
                 if (err) {
                     res.send(err)
                 } else {
-                    console.log('step 6');
                     for (user of deletedProject.users) {
                         User.findById(user, (err, foundUser) => {
                             foundUser.projects.pull({_id: req.params.id})
@@ -319,27 +328,56 @@ router.put('/bug/:id/change', isAuthenticated, (req, res) => {
         })
     })
 
+    //Bug revert
+    router.put('/bug/:id/revert', isAuthenticated, (req, res) => {
+        models.Project.findById(req.session.currentUser.currentProject, (err, currentProject) => {
+                let foundBug = currentProject.bugs.id(req.params.id)
+                console.log(foundBug);
+                if (foundBug.status === 'Closed') {
+                    foundBug.status = 'Testing';
+                    currentProject.save((err, bug) => {
+                        if (err) {
+                            res.send(err)
+                        } else {
+                            res.redirect(`/tracker/${req.session.currentUser.currentProject}/bugs`)
+                        }
+                    })
+                } else if (foundBug.status === 'Testing') {
+                    foundBug.status = 'In Progress';
+                    currentProject.save((err, bug) => {
+                        if (err) {
+                            res.send(err)
+                        } else {
+                            res.redirect(`/tracker/${req.session.currentUser.currentProject}/bugs`)
+                        }
+                    })
+                } else if (foundBug.status === 'In Progress') {
+                    let preBug = foundBug
+                    foundBug.status = 'Open';
+                    currentProject.save((err, bug) => {
+                        if (err) {
+                            res.send(err)
+                        } else {
+                            res.redirect(`/tracker/${req.session.currentUser.currentProject}/bugs`)
+                        }
+                    })
+                }
+            })
+        })
 
+router.delete('/:id/bugs/:bug', isAuthenticated, (req, res) => {
+    models.Project.findById(req.params.id, (err, project) => {
+        if (err) {
+            res.send(err)
+        } else {
+            project.bugs.pull({_id: req.params.bug});
+            // req.session.currentUser.currentProject = project
+            project.save()
+            res.redirect(`/tracker/${req.session.currentUser.currentProject}/bugs`)
+        }
+    })
+})
 
-    // models.Project.Bug.findById(req.params.id, (err, foundBug) => {
-    //     if (err) {
-    //         res.send(err)
-    //     } else {
-    //         console.log(foundBug);
-    //         if (foundBug.status === 'Open') {
-    //             foundBug.status = 'In Progress';
-    //             models.Bug.findByIdAndUpdate(req.params.id, {status: 'In Progress'}, (err, updatedBug) => {
-    //                 // console.log(updatedBug);
-    //                 if (err) {
-    //                     res.send(err)
-    //                 } else {
-    //                     res.redirect(`/tracker/${req.session.currentUser.currentProject}/bugs`)
-    //                 }
-    //             })
-    //         }
-    //     }
-    // })
-// })
 
 
 

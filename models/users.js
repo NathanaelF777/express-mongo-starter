@@ -6,6 +6,8 @@ const userSchema = new Schema({
     password: String,
     projects: [{ type: Schema.Types.ObjectId, ref: 'Project'}],
     currentProject: { type: Schema.Types.ObjectId, ref: 'Project'}
+}, {
+    timestamps: true
 })
 
 const User = mongoose.model('user', userSchema)

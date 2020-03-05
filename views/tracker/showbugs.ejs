@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <%- include ('../partials/head.ejs') %>
+        <title></title>
+    </head>
+    <body>
+        <%- include ('../partials/nav.ejs') %>
+        <div class="content">
+            <div class="container new-proj-cont">
+                <div class="project-show jumbotron">
+                    <h1 class='display-6'><%=bug.description%></h1>
+                    <h6><%=bug.recreation%></h6>
+                    <br>
+                    <h4>Submited by: <%=bug.author%></h4>
+                    <h6>at: <%=bug.createdAt%></h6>
+                    <br>
+                    <h4>Status: <%=bug.status%></h4>
+                    <form action="/tracker/bug/<%=bug._id%>/revert?_method=PUT" method="POST">
+                    <div class="align-content-center show-btn-cont">
+                        <button type="button" class="btn btn-secondary show-btn" onclick="window.location.href = '/tracker/<%=currentUser.currentProject%>/bugs';">Back</button>
+                        <button type="submit" class="btn btn-warning show-btn">Revert</button>
+                        <button type="button" class="btn btn-danger show-btn" data-toggle="modal" data-target="#exampleModalDelete">DELETE</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Delete Bug</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <h5>Are you sure you wish to delete this bug?</h5>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form action="/tracker/<%=project._id%>/bugs/<%=bug._id%>?_method=DELETE" method="POST">
+                <button type="submit" class="btn btn-danger">Delete</button></form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%- include ('../partials/footer.ejs') %>
+    </body>
+</html>
