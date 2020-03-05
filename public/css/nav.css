@@ -21,15 +21,15 @@ nav {
 }
 
 body::-webkit-scrollbar {
-  width: 0.25rem;
+  width: 0.35rem;
 }
 
 body::-webkit-scrollbar-track {
-  background: #1e1e24;
+  background: rgb(43, 43, 50);
 }
 
 body::-webkit-scrollbar-thumb {
-  background: #012200;
+  background: rgb(23, 23, 30);
 }
 
 main {

@@ -29,7 +29,7 @@ router.get('/', isAuthenticated, (req, res) => {
             currentProjects.push(data)
         })
     }
-    console.log(currentProjects);
+    // console.log(currentProjects);
     models.Project.find({_id: req.session.currentUser.projects}, (err, foundProjects) => {
         if (err) {
             console.log(err.message);
@@ -109,7 +109,7 @@ router.get('/:id/bugs', isAuthenticated, (req, res) => {
     let closedBugs = []
     let currentProject = {}
     models.Project.findById(req.session.currentUser.currentProject, (err, foundProject) => {
-        console.log(foundProject);
+        // console.log(foundProject);
         for (bug of foundProject.bugs) {
             if (bug.status === 'Open') {
                 openBugs.push(bug)
@@ -124,6 +124,8 @@ router.get('/:id/bugs', isAuthenticated, (req, res) => {
         if (err) {
             res.send(err)
         } else {
+            console.log(openBugs);
+            console.log(inProgressBugs);
             res.render('tracker/bugs.ejs', {
                 currentUser: req.session.currentUser,
                 currentProject: foundProject || currentProject,
@@ -193,18 +195,21 @@ router.delete('/:id', isAuthenticated, (req, res) => {
 
 // Create // BUG:
 router.post('/:id/new', isAuthenticated, (req, res) => {
-    req.body.author = req.session.currentUser;
-    req.body.project = req.params.id;
-    models.Bug.create(req.body, (err, newBug) => {
-        if (err) {
-            res.send(err)
-        } else {
-            console.log(newBug);
-            models.Project.findByIdAndUpdate(req.params.id, {$push: {bugs: newBug}}, (err, results) => {
-                console.log(results);
-                res.redirect(`/tracker/${req.params.id}/bugs`)
-            })
-        }
+    User.findById(req.session.currentUser._id, (err, user) => {
+        console.log(user);
+        req.body.author = user.username;
+        req.body.project = req.params.id;
+        models.Bug.create(req.body, (err, newBug) => {
+            if (err) {
+                res.send(err)
+            } else {
+                console.log(newBug);
+                models.Project.findByIdAndUpdate(req.params.id, {$push: {bugs: newBug}}, (err, results) => {
+                    console.log(results);
+                    res.redirect(`/tracker/${req.params.id}/bugs`)
+                })
+            }
+        })
     })
 })
 
@@ -219,6 +224,52 @@ router.put('/:id/select', isAuthenticated, (req, res) => {
         }
     })
 })
+
+//Bug change
+router.put('/bug/:id/change', isAuthenticated, (req, res) => {
+    // console.log(req.session.currentUser.currentProject);
+    models.Project.findById(req.session.currentUser.currentProject, (err, currentProject) => {
+            // console.log(currentProject);
+            let foundBug = currentProject.bugs.id(req.params.id)
+            console.log(foundBug);
+            if (foundBug.status === 'Open') {
+                let preBug = foundBug
+                foundBug.status = 'In Progress';
+                currentProject.save((err, bug) => {
+                    console.log(foundBug);
+                    console.log(currentProject);
+                    if (err) {
+                        res.send(err)
+                    } else {
+                        res.redirect(`/tracker/${req.session.currentUser.currentProject}/bugs`)
+                    }
+                })
+            }
+        })
+    })
+
+
+
+    // models.Project.Bug.findById(req.params.id, (err, foundBug) => {
+    //     if (err) {
+    //         res.send(err)
+    //     } else {
+    //         console.log(foundBug);
+    //         if (foundBug.status === 'Open') {
+    //             foundBug.status = 'In Progress';
+    //             models.Bug.findByIdAndUpdate(req.params.id, {status: 'In Progress'}, (err, updatedBug) => {
+    //                 // console.log(updatedBug);
+    //                 if (err) {
+    //                     res.send(err)
+    //                 } else {
+    //                     res.redirect(`/tracker/${req.session.currentUser.currentProject}/bugs`)
+    //                 }
+    //             })
+    //         }
+    //     }
+    // })
+// })
+
 
 
 // Export Router:

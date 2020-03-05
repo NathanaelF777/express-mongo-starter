@@ -14,75 +14,76 @@
                     <div class="col bug-stage">
                         <h3 class="bug-col-name bug-open">Open</h3>
                         <ul class="list-group bug-list">
+                            <% for (bug of openBugs) { %>
                             <li class="list-group-item bug-card">
                                 <div class="card bug-item">
-                                    <a href="#" class="bug-link">
+                                    <a href="/tracker/bug/<%=bug._id%>/show" class="bug-link">
                                     <div class="container-fluid  card-body">
-                                        <button type="button" class="bug-btn btn-sm btn btn-outline-danger">></button>
-                                        <p class="card-text bug-text">A really sucky bug found in some good code.</p>
-                                        <h6 class="card-title bug-title">Author: Bob</h6>
-                                        <p class="card-text bug-time">time</p>
+
+                                        <p class="card-text bug-text"><%=bug.description%></p>
+                                        <h6 class="card-title bug-title"><%=bug.author%></h6>
                                     </div>
-                                </a>
+                                    </a>
                                 </div>
+                                <form action="/tracker/bug/<%=bug._id%>/change?_method=PUT" method="POST">
+                                    <button type="submit" class="bug-btn btn btn-danger"><i class="fas fa-arrow-circle-right"></i></button>
+                                </form>
                             </li>
-                            <li class="list-group-item bug-card">
-                                <div class="card bug-item">
-                                    <div class="container-fluid  card-body">
-                                        <h6 class="card-title">Author: Bob</h6>
-                                        <p class="card-text">A really sucky bug found in some good code.</p>
-                                    </div>
-                                </div>
-                            </li>
+                            <%}%>
                         </ul>
                     </div>
                     <div class="col bug-stage">
                         <h3 class="bug-col-name bug-progress">In Progress</h3>
                         <ul class="list-group bug-list">
+                            <% for (bug of inProgressBugs) { %>
                             <li class="list-group-item bug-card">
                                 <div class="card bug-item">
+                                    <a href="/tracker/bug/<%=bug._id%>/show" class="bug-link">
                                     <div class="container-fluid  card-body">
-                                        <h6 class="card-title">Author: Bob</h6>
-                                        <p class="card-text">A really sucky bug found in some good code.</p>
+                                        <button type="button" class="bug-btn btn-sm btn btn-outline-danger">></button>
+                                        <p class="card-text bug-text"><%=bug.description%></p>
+                                        <h6 class="card-title bug-title"><%=bug.author%></h6>
                                     </div>
+                                    </a>
                                 </div>
                             </li>
+                            <%}%>
                         </ul>
                     </div>
                     <div class="col bug-stage">
                         <h3 class="bug-col-name bug-testing">Testing</h3>
                         <ul class="list-group bug-list">
+                            <% for (bug of testingBugs) { %>
                             <li class="list-group-item bug-card">
                                 <div class="card bug-item">
-                                    <a href="#" class="bug-link">
+                                    <a href="/tracker/bug/<%=bug._id%>/show" class="bug-link">
                                     <div class="container-fluid  card-body">
-                                        <h6 class="card-title">Author: Bob</h6>
-                                        <p class="card-text">A really sucky bug found in some good code.</p>
+                                        <button type="button" class="bug-btn btn-sm btn btn-outline-danger">></button>
+                                        <p class="card-text bug-text"><%=bug.description%></p>
+                                        <h6 class="card-title bug-title"><%=bug.author%></h6>
                                     </div>
                                     </a>
                                 </div>
                             </li>
+                            <%}%>
                         </ul>
                     </div>
                     <div class="col bug-stage">
                         <h3 class="bug-col-name bug-closed">Closed</h3>
                         <ul class="list-group bug-list">
+                            <% for (bug of closedBugs) { %>
                             <li class="list-group-item bug-card">
                                 <div class="card bug-item">
+                                    <a href="/tracker/bug/<%=bug._id%>/show" class="bug-link">
                                     <div class="container-fluid  card-body">
-                                        <h6 class="card-title">Author: Bob</h6>
-                                        <p class="card-text">A really sucky bug found in some good code.</p>
+                                        <button type="button" class="bug-btn btn-sm btn btn-outline-danger">></button>
+                                        <p class="card-text bug-text"><%=bug.description%></p>
+                                        <h6 class="card-title bug-title"><%=bug.author%></h6>
                                     </div>
+                                    </a>
                                 </div>
                             </li>
-                            <li class="list-group-item bug-card">
-                                <div class="card bug-item">
-                                    <div class="container-fluid  card-body">
-                                        <h6 class="card-title">Author: Bob</h6>
-                                        <p class="card-text">A really sucky bug found in some good code.</p>
-                                    </div>
-                                </div>
-                            </li>
+                            <%}%>
                         </ul>
                     </div>
                 </div>
