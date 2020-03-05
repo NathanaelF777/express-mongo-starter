@@ -31,22 +31,19 @@ router.get('/', isAuthenticated, async (req, res) => {
             })
         }
     }
-    await loadProjects();
-    res.render('tracker/index.ejs', {
-        projects: currentProjects,
-        currentUser: req.session.currentUser
-    })
-    // models.Project.find({_id: req.session.currentUser.projects}, (err, foundProjects) => {
-    //     if (err) {
-    //         console.log(err.message);
-    //         res.send("There appears to be an error.")
-    //     } else {
-    //         res.render('tracker/index.ejs', {
-    //             projects: currentProjects,
-    //             currentUser: req.session.currentUser
-    //         })
-    //     }
-    // })
+    await loadProjects().then(
+        models.Project.find({_id: req.session.currentUser.projects}, (err, foundProjects) => {
+            if (err) {
+                console.log(err.message);
+                res.send("There appears to be an error.")
+            } else {
+                res.render('tracker/index.ejs', {
+                    projects: currentProjects,
+                    currentUser: req.session.currentUser
+                })
+            }
+        })
+    );
 })
 
 // new
