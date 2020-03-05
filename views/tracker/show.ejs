@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <%- include ('../partials/head.ejs') %>
+        <title></title>
+    </head>
+    <body>
+        <%- include ('../partials/nav.ejs') %>
+        <div class="content">
+            <div class="container new-proj-cont">
+                <div class="project-show jumbotron">
+                    <h1 class='display-4'><%=project.name%></h1>
+                    <h4><%=project.description%></h4>
+                    <h5>Bugs: <%=bugCount%></h5>
+                    <br>
+                    <h4>Created by: <%=creator%></h4>
+                    <h5>Members: <%=userCount%></h5>
+                    <div class="align-content-center show-btn-cont">
+                        <button type="button" class="btn btn-secondary show-btn" onclick="window.location.href = '/tracker';">Back</button>
+                        <button type="button" class="btn btn-success show-btn" data-toggle="modal" data-target="#exampleModalCenter">Invite</button>
+                        <button type="button" class="btn btn-danger show-btn" data-toggle="modal" data-target="#exampleModalDelete">DELETE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Invite to <%=project.name%></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <h4>Give this invite code to team members to allow them to join this project.</h4>
+                  <br>
+                  <h6>Invite Code:</h6>
+                  <h6><%=project._id%></h6>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="exampleModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Delete <%=project.name%></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <h5>Are you sure you wish to delete this project?</h5>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form action="/tracker/<%=project._id%>?_method=DELETE" method="POST">
+                <button type="submit" class="btn btn-danger">Delete</button></form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%- include ('../partials/footer.ejs') %>
+    </body>
+</html>

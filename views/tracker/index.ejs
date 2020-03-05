@@ -8,7 +8,9 @@
         <%- include ('../partials/nav.ejs') %>
         <div class="content">
             <div class="container">
-                <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-success bug-submit">New Project</button>
+                <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-success project-submit">New Project</button>
+                <span></span>
+                <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-primary project-submit">Join</button>
                 <% console.log(currentUser) %>
                 <% console.log(projects) %>
                 <h2><%=currentUser.username%>'s Projects:</h2>
@@ -30,7 +32,7 @@
                     <div class="col proj-stage container align-self-center">
                         <% for (let i = 0; i < projects.length; i++) {%>
                             <div class="proj-item">
-                                <button type="button" class="btn btn-primary bug-submit">Details</button>
+                                <button type="button" class="btn btn-primary bug-submit" onclick="window.location.href = '/tracker/<%=projects[i]._id%>';">Details</button>
                             </div>
                             <%}%>
                     </div>

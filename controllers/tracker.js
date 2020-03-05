@@ -22,14 +22,16 @@ router.get('/test', (req, res) => {
 })
 
 // index
-router.get('/', isAuthenticated, (req, res) => {
+router.get('/', isAuthenticated, async (req, res) => {
     let currentProjects = []
-    for (project of req.session.currentUser.projects) {
-        models.Project.findById(project, (err, data) => {
-            currentProjects.push(data)
-        })
+    const loadProjects = async () => {
+        for (project of req.session.currentUser.projects) {
+            models.Project.findById(project, (err, data) => {
+                currentProjects.push(data)
+            })
+        }
     }
-    // console.log(currentProjects);
+    await loadProjects();
     models.Project.find({_id: req.session.currentUser.projects}, (err, foundProjects) => {
         if (err) {
             console.log(err.message);
@@ -72,16 +74,33 @@ router.get('/seed', isAuthenticated, (req, res) => {
 
 // Show
 router.get('/:id', (req, res) => {
-    models.Bug.findById(req.params.id, (err, foundBug) => {
-        if (err) {
-            res.send(err.message)
-        } else {
-            res.render('tracker/show.ejs', {
-                title: foundBug.title,
-                bug: foundBug,
-                currentUser: req.session.currentUser
-            })
-        }
+    models.Project.findById(req.params.id, (err, foundProject) => {
+        User.findById(foundProject.creator, (err, foundUser) => {
+            if (err) {
+                res.send(err)
+            } else {
+                let creator = foundUser.username
+                let bugCount = 0;
+                let userCount = 0;
+                for (bug of foundProject.bugs) {
+                    bugCount++
+                }
+                for (user of foundProject.users) {
+                    userCount++
+                }
+                if (err) {
+                    res.send(err.message)
+                } else {
+                    res.render('tracker/show.ejs', {
+                        project: foundProject,
+                        currentUser: req.session.currentUser,
+                        bugCount: bugCount,
+                        creator: creator,
+                        userCount: userCount
+                    })
+                }
+            }
+        })
     })
 })
 
@@ -183,12 +202,34 @@ router.put('/:id', isAuthenticated, (req, res) => {
 
 // DELETE
 router.delete('/:id', isAuthenticated, (req, res) => {
-    models.Bug.findByIdAndDelete(req.params.id, (err, deletedLog) => {
+    console.log('this?');
+    User.findOne(req.session.currentUser, (err, currentUser) => {
         if (err) {
-            console.log(err.message);
+            res.send(err.message);
         } else {
-            console.log(`${deletedLog} has been deleted.`);
-            res.redirect('/tracker')
+            console.log('step 1');
+            currentUser.projects.pull({_id: req.params.id})
+            console.log('step 2');
+            currentUser.currentProject = currentUser.projects[0];
+            console.log('step 3');
+            req.session.currentUser = currentUser
+            console.log('step 4');
+            currentUser.save();
+            console.log('step 5');
+            models.Project.findByIdAndDelete(req.params.id, (err, deletedProject) => {
+                if (err) {
+                    res.send(err)
+                } else {
+                    console.log('step 6');
+                    for (user of deletedProject.users) {
+                        User.findById(user, (err, foundUser) => {
+                            foundUser.projects.pull({_id: req.params.id})
+                        })
+                    }
+                    console.log(`${deletedProject} has been deleted.`);
+                    res.redirect('/tracker')
+                }
+            })
         }
     })
 })
@@ -227,17 +268,31 @@ router.put('/:id/select', isAuthenticated, (req, res) => {
 
 //Bug change
 router.put('/bug/:id/change', isAuthenticated, (req, res) => {
-    // console.log(req.session.currentUser.currentProject);
     models.Project.findById(req.session.currentUser.currentProject, (err, currentProject) => {
-            // console.log(currentProject);
             let foundBug = currentProject.bugs.id(req.params.id)
             console.log(foundBug);
             if (foundBug.status === 'Open') {
-                let preBug = foundBug
                 foundBug.status = 'In Progress';
                 currentProject.save((err, bug) => {
-                    console.log(foundBug);
-                    console.log(currentProject);
+                    if (err) {
+                        res.send(err)
+                    } else {
+                        res.redirect(`/tracker/${req.session.currentUser.currentProject}/bugs`)
+                    }
+                })
+            } else if (foundBug.status === 'In Progress') {
+                foundBug.status = 'Testing';
+                currentProject.save((err, bug) => {
+                    if (err) {
+                        res.send(err)
+                    } else {
+                        res.redirect(`/tracker/${req.session.currentUser.currentProject}/bugs`)
+                    }
+                })
+            } else if (foundBug.status === 'Testing') {
+                let preBug = foundBug
+                foundBug.status = 'Closed';
+                currentProject.save((err, bug) => {
                     if (err) {
                         res.send(err)
                     } else {

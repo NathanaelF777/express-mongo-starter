@@ -21,7 +21,7 @@
                                     <div class="container-fluid  card-body">
 
                                         <p class="card-text bug-text"><%=bug.description%></p>
-                                        <h6 class="card-title bug-title"><%=bug.author%></h6>
+                                        <h6 class="card-title bug-title" style="color: grey;"><%=bug.author%></h6>
                                     </div>
                                     </a>
                                 </div>
@@ -40,12 +40,14 @@
                                 <div class="card bug-item">
                                     <a href="/tracker/bug/<%=bug._id%>/show" class="bug-link">
                                     <div class="container-fluid  card-body">
-                                        <button type="button" class="bug-btn btn-sm btn btn-outline-danger">></button>
                                         <p class="card-text bug-text"><%=bug.description%></p>
-                                        <h6 class="card-title bug-title"><%=bug.author%></h6>
+                                        <h6 class="card-title bug-title" style="color: grey;"><%=bug.author%></h6>
                                     </div>
                                     </a>
                                 </div>
+                                <form action="/tracker/bug/<%=bug._id%>/change?_method=PUT" method="POST">
+                                    <button type="submit" class="bug-btn btn btn-warning"><i class="fas fa-arrow-circle-right"></i></button>
+                                </form>
                             </li>
                             <%}%>
                         </ul>
@@ -58,12 +60,14 @@
                                 <div class="card bug-item">
                                     <a href="/tracker/bug/<%=bug._id%>/show" class="bug-link">
                                     <div class="container-fluid  card-body">
-                                        <button type="button" class="bug-btn btn-sm btn btn-outline-danger">></button>
                                         <p class="card-text bug-text"><%=bug.description%></p>
-                                        <h6 class="card-title bug-title"><%=bug.author%></h6>
+                                        <h6 class="card-title bug-title" style="color: grey;"><%=bug.author%></h6>
                                     </div>
                                     </a>
                                 </div>
+                                <form action="/tracker/bug/<%=bug._id%>/change?_method=PUT" method="POST">
+                                    <button type="submit" class="bug-btn btn btn-primary"><i class="fas fa-arrow-circle-right"></i></button>
+                                </form>
                             </li>
                             <%}%>
                         </ul>
@@ -76,9 +80,8 @@
                                 <div class="card bug-item">
                                     <a href="/tracker/bug/<%=bug._id%>/show" class="bug-link">
                                     <div class="container-fluid  card-body">
-                                        <button type="button" class="bug-btn btn-sm btn btn-outline-danger">></button>
                                         <p class="card-text bug-text"><%=bug.description%></p>
-                                        <h6 class="card-title bug-title"><%=bug.author%></h6>
+                                        <h6 class="card-title bug-title" style="color: grey;"><%=bug.author%></h6>
                                     </div>
                                     </a>
                                 </div>
